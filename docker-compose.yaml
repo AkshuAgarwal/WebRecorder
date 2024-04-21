@@ -1,0 +1,55 @@
+version: '3'
+services:
+  redis:
+    container_name: Redis
+    build:
+      context: ./redis
+      dockerfile: Dockerfile
+    networks:
+      - RedisBridge
+    expose:
+      - 6379
+    volumes:
+      - type: volume
+        source: RedisData
+        target: /data
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+  backend:
+    container_name: Backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    networks:
+      - RedisBridge
+      - NginxBridge
+    expose:
+      - 8000
+    depends_on:
+      redis:
+        condition: service_healthy
+        restart: true
+    healthcheck:
+      test: curl -f http://127.0.0.1:8000 || exit 1
+      interval: 30s
+      timeout: 5s
+      retries: 10
+  nginx:
+    container_name: Nginx
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    ports:
+      - 1337:80
+    networks:
+      - NginxBridge
+    depends_on:
+      - backend
+networks:
+  RedisBridge:
+    driver: bridge
+  NginxBridge:
+    driver: bridge
+volumes:
+  RedisData:
+    driver: local

@@ -3,11 +3,46 @@ A FastAPI + Playwright Web Backend that can record the page of a website from it
 
 
 ## Requirements
+- Docker v4.23.0 and above (optional, check out [Running without Docker](#running-without-docker))
+
+
+## Setup Guide
+- Clone the repository
+
+    ```bash
+    git clone https://github.com/AkshuAgarwal/WebRecorder
+    cd WebRecorder
+    ```
+
+- Make sure you have [Docker](https://docker.com) installed. If not, install and set it up.
+
+- Setup the environment variables
+    - Rename [`.env.prod.example`](./.env.prod.example) to `.env.prod`
+
+    - Set the values to the environment variables in the file
+        - `ENVIRONMENT`: The current working environment (`development`/`production`). Do not change it as it is already synced with the env file.
+
+        - `REDIS_URL`: URL of the redis server to connect to.
+
+- Run the code using docker compose
+
+    ```bash
+    # For production environment
+    docker compose -f docker-compose.yaml -f docker.compose.prod.yaml up
+    ```
+
+
+## Running without Docker
+
+If you wish to run the server without using docker, you can follow the instructions below to set up everything manually.
+
+## Requirements (without Docker)
+
 - Python 3.11 and above
 - Redis Stack Server 7.2.4 and above
 
 
-## Setup Guide
+## Setup Guide (without Docker)
 - Clone the repository
 
     ```bash
@@ -62,6 +97,8 @@ A FastAPI + Playwright Web Backend that can record the page of a website from it
 
     # For all the commands, run `python server help`
     ```
+
+> If you want to use Nginx, you can do it manually by following their documentation and configure the server accordingly.
 
 
 ## Limitations
