@@ -392,5 +392,6 @@ class WebServer:
 def run():
     webserver = WebServer(redis_url=os.environ["REDIS_URL"])
     hconf = HypercornConfig()
+    hconf.bind = "0.0.0.0:8000"
 
     asyncio.get_event_loop().run_until_complete(hypercorn_serve(webserver.app, hconf))
