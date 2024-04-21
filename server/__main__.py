@@ -4,7 +4,7 @@ import redis
 import shutil
 from dotenv import load_dotenv
 
-from . import run
+from __init__ import run
 
 
 load_dotenv("./.env")
