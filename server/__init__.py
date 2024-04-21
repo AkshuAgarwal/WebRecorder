@@ -56,7 +56,6 @@ class BrowserController:
     async def existing_recording(
         self, id: str, *, get_buffer: bool = True
     ) -> io.BytesIO | str | None:
-        print(10)
         async with self.webserver.redis.locks["videos_json"]:
             resp = await self.webserver.redis.json.get(f"videos:{id}")
 
@@ -91,7 +90,6 @@ class BrowserController:
         get_buffer: bool = True,
         delete_from_filesystem: bool = False,
     ) -> io.BytesIO | str:
-        print(url)
         if get_buffer is False and delete_from_filesystem is True:
             raise Exception(
                 "Invalid combination of parameters found.\n"
@@ -99,8 +97,6 @@ class BrowserController:
             )
 
         video_dir = f"videos/{id}"
-
-        print(1)
 
         context = await self.browser.new_context(
             viewport={"width": 1920, "height": 1080},
@@ -110,8 +106,6 @@ class BrowserController:
         )
         page = await context.new_page()
         cdp = await context.new_cdp_session(page)
-
-        print(2)
 
         try:
             response = await page.goto(url)
@@ -127,8 +121,6 @@ class BrowserController:
             "() => (document.documentElement.scrollHeight || document.body.scrollHeight) - window.innerHeight"
         )
 
-        print(3)
-
         async with self.webserver.redis.locks["videos_json"]:
             await self.webserver.redis.json.merge(
                 f"videos:{id}",
@@ -137,8 +129,6 @@ class BrowserController:
                     "status": "recording",
                 },
             )
-
-        print(4)
 
         await cdp.send(
             "Input.synthesizeScrollGesture",
@@ -150,13 +140,9 @@ class BrowserController:
             },
         )
 
-        print(5)
-
         await cdp.detach()
         await page.close()
         await context.close()
-
-        print("done", url)
 
         async with self.webserver.redis.locks["videos_json"]:
             await self.webserver.redis.json.merge(
@@ -229,7 +215,6 @@ class RedisHandler:
         existing_rec: str | None = await self.webserver.browser_cont.existing_recording(
             id, get_buffer=False
         )
-        print(existing_rec)
 
         if existing_rec:
             file_path = existing_rec
