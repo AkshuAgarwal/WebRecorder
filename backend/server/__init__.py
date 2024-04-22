@@ -17,6 +17,7 @@ import redis.asyncio as aioredis
 from redis.commands.json.path import Path as RedisPath
 
 from fastapi import APIRouter, FastAPI, status
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import ORJSONResponse, StreamingResponse
 
 from playwright.async_api import async_playwright, Error as PlaywrightError
@@ -354,6 +355,14 @@ class WebServerRouter(APIRouter):
 class WebServer:
     def __init__(self, *, redis_url: str) -> None:
         self.app = FastAPI(lifespan=self.lifespan)
+
+        self.app.add_middleware(
+            CORSMiddleware,
+            allow_origins=os.environ["CORS_ALLOW_ORIGINS"].split(","),
+            allow_credentials=True,
+            allow_methods=["*"],
+            allow_headers=["*"],
+        )
 
         self.router = WebServerRouter(self)
         self.app.include_router(self.router)
