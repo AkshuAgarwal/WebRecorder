@@ -25,8 +25,8 @@ from playwright.async_api import async_playwright, Error as PlaywrightError
 from hypercorn.asyncio import serve as hypercorn_serve
 from hypercorn.config import Config as HypercornConfig
 
+from models import Mr_convert
 from _orjson import ORJSONDecoder, ORJSONEncoder
-from models import Mr_convert, Mr_convert_status, Mr_get_video
 from errors import InvalidURLError, PageNotFoundError, SiteDownError
 
 if TYPE_CHECKING:
@@ -295,9 +295,15 @@ class WebServerRouter(APIRouter):
             status_code=status.HTTP_202_ACCEPTED,
         )
 
-    async def r_convert_status(self, data: Mr_convert_status) -> ORJSONResponse:
+    async def r_convert_status(self, id: str) -> ORJSONResponse:
+        if not id:
+            return ORJSONResponse(
+                {"error": "Missing required query param: `id`"},
+                status_code=status.HTTP_400_BAD_REQUEST,
+            )
+
         async with self.webserver.redis.locks["videos_json"]:
-            response: dict = await self.webserver.redis.json.get(f"videos:{data.id}")
+            response: dict = await self.webserver.redis.json.get(f"videos:{id}")
 
         if not response:
             return ORJSONResponse(
@@ -329,9 +335,15 @@ class WebServerRouter(APIRouter):
                     status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 )
 
-    async def r_convert_video(self, data: Mr_get_video) -> StreamingResponse:
+    async def r_convert_video(self, id: str) -> StreamingResponse:
+        if not id:
+            return ORJSONResponse(
+                {"error": "Missing required query param: `id`"},
+                status_code=status.HTTP_400_BAD_REQUEST,
+            )
+
         async with self.webserver.redis.locks["videos_json"]:
-            response: dict = await self.webserver.redis.json.get(f"videos:{data.id}")
+            response: dict = await self.webserver.redis.json.get(f"videos:{id}")
 
         if not response or response.get("status") != "ready":
             return ORJSONResponse(
