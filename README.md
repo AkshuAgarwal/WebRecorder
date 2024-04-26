@@ -22,8 +22,6 @@ A FastAPI + Playwright Web Backend that can record the page of a website from it
     - Set the values to the environment variables in the file
         - `ENVIRONMENT`: The current working environment (`development`/`production`). Do not change it as it is already synced with the env file.
 
-        - `REDIS_URL`: URL of the redis server to connect to.
-
         - `CORS_ALLOW_ORIGINS`: A comma separated list of CORS allowed origins. "*" can be used as wildcard to allow all origins.
 
 - Setup SSL Certificate and Key
@@ -99,7 +97,7 @@ If you wish to run the server without using docker, you can follow the instructi
     - Rename [`.env.example`](./.env.example) to `.env`
 
     - Set the values to the environment variables in the file
-        - `REDIS_URL`: URL of the redis server to connect to.
+        - `ENVIRONMENT`: The current working environment (`development`/`production`). Do not change it as it is already synced with the env file.
 
         - `CORS_ALLOW_ORIGINS`: A comma separated list of CORS allowed origins. "*" can be used as wildcard to allow all origins.
 
