@@ -24,6 +24,8 @@ A FastAPI + Playwright Web Backend that can record the page of a website from it
 
         - `REDIS_URL`: URL of the redis server to connect to.
 
+        - `CORS_ALLOW_ORIGINS`: A comma separated list of CORS allowed origins. "*" can be used as wildcard to allow all origins.
+
 - Setup SSL Certificate and Key
     - Generate an SSL certificate and key.
 
@@ -98,6 +100,8 @@ If you wish to run the server without using docker, you can follow the instructi
 
     - Set the values to the environment variables in the file
         - `REDIS_URL`: URL of the redis server to connect to.
+
+        - `CORS_ALLOW_ORIGINS`: A comma separated list of CORS allowed origins. "*" can be used as wildcard to allow all origins.
 
 - Run the Redis Server
 
