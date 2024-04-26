@@ -24,6 +24,21 @@ A FastAPI + Playwright Web Backend that can record the page of a website from it
 
         - `REDIS_URL`: URL of the redis server to connect to.
 
+- Setup SSL Certificate and Key
+    - Generate an SSL certificate and key.
+
+        - To generate a sample certificate and key (for testing, not recommended for production), run
+
+            ```bash
+            openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout cert.key -out cert.crt
+            ```
+
+            > Make sure you have openssl installed.
+
+            Once generated, copy these files and paste them into [`/nginx`](./nginx/) directory.
+
+    - Replace [`nginx/cert.crt.example`](./nginx/cert.crt.example) with `cert.crt` file and [`nginx/cert.key.example`](./nginx/cert.key.example) with `cert.key` file.
+
 - Run the code using docker compose
 
     ```bash
