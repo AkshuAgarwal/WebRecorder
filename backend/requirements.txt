@@ -1,6 +1,8 @@
 annotated-types==0.6.0
 anyio==4.3.0
 fastapi==0.110.2
+ffmpeg-python==0.2.0
+future==1.0.0
 greenlet==3.0.3
 h11==0.14.0
 h2==4.1.0
